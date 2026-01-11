@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   nginx:
     build: ./nginx
@@ -14,7 +12,7 @@ services:
       - app_network
 
   app:
-    image: php:8.2-fpm
+    build: ./app
     container_name: app_php
     env_file:
       - .env
@@ -24,6 +22,7 @@ services:
       - database
     networks:
       - app_network
+
 
   database:
     image: mysql:8.0

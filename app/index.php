@@ -1,10 +1,3 @@
-<html>
-
-<head>
-<title>Exemplo PHP</title>
-</head>
-<body>
-
 <?php
 ini_set("display_errors", 1);
 header('Content-Type: text/html; charset=iso-8859-1');
@@ -15,12 +8,10 @@ echo 'Versao Atual do PHP: ' . phpversion() . '<br>';
 
 $servername = getenv('DB_HOST');
 $username   = getenv('DB_USER');
-$password   = getenv('DB_PASS');
+$password   = getenv('DB_PASSWORD');
 $database   = getenv('DB_NAME');
 
 // Criar conexão
-
-
 $link = new mysqli($servername, $username, $password, $database);
 
 /* check connection */

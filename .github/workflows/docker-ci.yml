@@ -1,0 +1,35 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ "main", "feature/improvements" ]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Copy .env example to .env
+        run: cp .env.example .env
+
+      - name: Build Docker containers
+        run: docker compose build
+
+      - name: Start Docker containers in background
+        run: docker compose up -d
+
+      - name: Wait for database to be ready
+        run: sleep 20
+
+      - name: Run PHP version check inside app container
+        run: docker compose exec -T app php -v
+
+      - name: Shutdown containers
+        run: docker compose down
