@@ -1,15 +1,15 @@
-FROM php:8.2-apache
+FROM php:8.2-fpm
 
-# Instala extensões necessárias do PHP
+# Instala extensões necessárias
 RUN docker-php-ext-install mysqli
 
-# Habilita o mod_rewrite do Apache (boa prática)
-RUN a2enmod rewrite
+# Define diretório de trabalho
+WORKDIR /var/www/html
 
-# Copia o código da aplicação para o container
-COPY . /var/www/html/
+# Copia a aplicação
+COPY . .
 
 # Ajusta permissões
 RUN chown -R www-data:www-data /var/www/html
 
-EXPOSE 80
+EXPOSE 9000

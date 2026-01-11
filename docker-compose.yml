@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  nginx:
+    build: ./nginx
+    container_name: app_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html
+    depends_on:
+      - app
+    networks:
+      - app_network
+
+  app:
+    image: php:8.2-fpm
+    container_name: app_php
+    env_file:
+      - .env
+    volumes:
+      - ./app:/var/www/html
+    depends_on:
+      - database
+    networks:
+      - app_network
+
+  database:
+    image: mysql:8.0
+    container_name: app_db
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
